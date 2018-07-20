@@ -11,10 +11,10 @@ void pause()
 	std::cin.get();
 }
 
-int selectLength()
+int select_length()
 {
 	int length = 0;
-	do 
+	do
 	{
 		std::cout << "How many letters will the name contain?: ";
 		std::cin >> length;
@@ -23,30 +23,47 @@ int selectLength()
 	return length;
 }
 
-void makeCapital(std::string * _name) 
+void make_capital(std::string * _name)
 {
 	int mask = 0xDF; // (mask bitwise : 11011111)
 	_name->at(0) = _name->at(0) & mask;
 }
 
-int main() 
+bool f_repeat()
+{
+	char character;
+	std::cout << "\nDo you want to reroll name? (y/n):";
+	std::cin >> character;
+
+	if (character == 'y') {
+		return true;
+	}
+	else
+		return false;
+}
+
+int main()
 {
 	std::random_device rd;
 	std::mt19937 mt(rd());
 	std::uniform_int_distribution<int> dist(97, 122);
 
-	std::string name;
-	int length = selectLength();
+	bool repeat = 1;
 
-	for (int i = 0; i < length; ++i)
+	while (repeat)
 	{
-		char letter = dist(mt);
-		name += letter;
+		std::string name;
+		int length = select_length();
+
+		for (int i = 0; i < length; ++i)
+		{
+			char character = dist(mt);
+			name += character;
+		}
+		make_capital(&name);
+
+		std::cout << "Your name is: " << name;
+		repeat = f_repeat();
 	}
-
-	makeCapital(&name);
-
-	std::cout << "Your name is: " << name;
-
 	pause();
 }
